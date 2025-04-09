@@ -7,7 +7,7 @@ import java.util.*
 
 class ShowMonthlyTransactions(private val dataSource: FinanceTrackerDataSource) {
 
-    private fun getTransactionsByMonth(month: String, year: Int): List<Transaction> {
+    fun getTransactionsByMonth(month: String, year: Int): List<Transaction> {
         val monthEnum = Month.fromString(month) ?: return emptyList()
 
         return dataSource.getAllTransactions()
