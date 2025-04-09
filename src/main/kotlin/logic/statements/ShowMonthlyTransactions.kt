@@ -5,9 +5,9 @@ import org.qudus.squad.logic.models.Transaction
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ShowMonthlyTransactions(private val dataSource: FinanceTrackerDataSource) {
+abstract class ShowMonthlyTransactions(private val dataSource: FinanceTrackerDataSource) {
 
-    fun getTransactionsByMonth(month: String, year: Int): List<Transaction> {
+    protected fun getTransactionsByMonth(month: String, year: Int): List<Transaction> {
         val monthEnum = Month.fromString(month) ?: return emptyList()
 
         return dataSource.getAllTransactions()
@@ -15,17 +15,17 @@ class ShowMonthlyTransactions(private val dataSource: FinanceTrackerDataSource) 
                 val calendar = Calendar.getInstance()
                 calendar.timeInMillis = element.timeStamp
 
-                val transactionMonth = calendar.get(Calendar.MONTH)      // 0-11
-                val transactionYear = calendar.get(Calendar.YEAR)        // full year like 2025
+                val transactionMonth = calendar.get(Calendar.MONTH)
+                val transactionYear = calendar.get(Calendar.YEAR)
 
                 transactionMonth == monthEnum.value && transactionYear == year
             }
             .sortedBy { element ->
-                if (element.amount > 0) 0 else 1
+                if (element.type.lowercase() == "income") 0 else 1
             }
     }
 
-    fun displayMonthlySheet(month: String, year: Int) {
+    open fun displayMonthlySheet(month: String, year: Int) {
         val transactions = getTransactionsByMonth(month, year)
 
         if (transactions.isEmpty()) {
@@ -47,7 +47,6 @@ class ShowMonthlyTransactions(private val dataSource: FinanceTrackerDataSource) 
         }
 
         println("Choose 0 to continue")
-
     }
 }
 
@@ -56,8 +55,7 @@ enum class Month(val value: Int) {
     JUL(6), AUG(7), SEP(8), OCT(9), NOV(10), DEC(11);
 
     companion object {
-        fun fromString(name: String): Month? = entries.find { element ->
-            element.name.equals(name, ignoreCase = true)
-        }
+        fun fromString(name: String): Month? =
+            entries.find { element -> element.name.equals(name, ignoreCase = true) }
     }
 }
