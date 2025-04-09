@@ -1,18 +1,27 @@
 package org.qudus.squad.logic.statements
 
+import org.qudus.squad.logic.FinanceTrackerDataSource
+import org.qudus.squad.logic.models.Transaction
 import java.text.SimpleDateFormat
+import java.util.*
 
-class ShowMonthlyTransactions(private val transactionObject: Transaction) {
+class ShowMonthlyTransactions(private val dataSource: FinanceTrackerDataSource) {
 
     private fun getTransactionsByMonth(month: String, year: Int): List<Transaction> {
         val monthEnum = Month.fromString(month) ?: return emptyList()
 
-        return transactionObject.getAllTransactions()
+        return dataSource.getAllTransactions()
             .filter { element ->
-                (element.date.month == monthEnum.value) && (element.date.year + 1900 == year)
+                val calendar = Calendar.getInstance()
+                calendar.timeInMillis = element.timeStamp
+
+                val transactionMonth = calendar.get(Calendar.MONTH)      // 0-11
+                val transactionYear = calendar.get(Calendar.YEAR)        // full year like 2025
+
+                transactionMonth == monthEnum.value && transactionYear == year
             }
             .sortedBy { element ->
-                if (element.isIncome) 0 else 1
+                if (element.amount > 0) 0 else 1
             }
     }
 
@@ -29,9 +38,12 @@ class ShowMonthlyTransactions(private val transactionObject: Transaction) {
         val dateFormat = SimpleDateFormat("dd-MMM-yyyy")
 
         for (transaction in transactions) {
-            val typeOfTransaction = if (transaction.isIncome) "Income" else "Expense"
-            val formattedDateForTransaction = dateFormat.format(transaction.date)
-            println("$typeOfTransaction: ${transaction.amount} USD   -  ${transaction.category}  -  $formattedDateForTransaction")
+            val isIncome = transaction.type.lowercase() == "income"
+            val typeOfTransaction = if (isIncome) "Income" else "Expense"
+            val sign = if (isIncome) "+" else "-"
+            val formattedDate = dateFormat.format(Date(transaction.timeStamp))
+
+            println("$typeOfTransaction: $sign${transaction.amount} USD - ${transaction.category.name} - $formattedDate")
         }
 
         println("Choose 0 to continue")
