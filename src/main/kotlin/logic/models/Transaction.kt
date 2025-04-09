@@ -5,5 +5,5 @@ data class Transaction(
     val type: String,
     val amount: Double,
     val timeStamp: Long,
-    val category: List<String>
+    val category: Category
 )
