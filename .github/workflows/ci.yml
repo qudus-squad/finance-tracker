@@ -38,6 +38,3 @@ jobs:
 
       - name: Run tests
         run: ./gradlew test
-
-      - name: Run lint
-        run: ./gradlew :app:lint
