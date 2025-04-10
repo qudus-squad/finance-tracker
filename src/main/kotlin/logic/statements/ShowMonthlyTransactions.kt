@@ -1,16 +1,16 @@
 package org.qudus.squad.logic.statements
 
-import org.qudus.squad.logic.FinanceTrackerDataSource
+import org.qudus.squad.dataSource.FinanceTrackerDataSourceImpl
 import org.qudus.squad.logic.models.Transaction
 import java.text.SimpleDateFormat
 import java.util.*
 
-abstract class ShowMonthlyTransactions(private val dataSource: FinanceTrackerDataSource) {
+abstract class ShowMonthlyTransactions(private val financeTrackerImplementation: FinanceTrackerDataSourceImpl) {
 
     protected fun getTransactionsByMonth(month: String, year: Int): List<Transaction> {
         val monthEnum = Month.fromString(month) ?: return emptyList()
 
-        return dataSource.getAllTransactions()
+        return financeTrackerImplementation.getAllTransactions()
             .filter { element ->
                 val calendar = Calendar.getInstance()
                 calendar.timeInMillis = element.timeStamp

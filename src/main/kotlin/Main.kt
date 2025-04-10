@@ -1,9 +1,10 @@
 package org.qudus.squad
 
-import org.qudus.squad.testCases.checkMonthlyTransactionsTestCases
+import org.qudus.squad.testCases.testMonthlyTransactionsCases
+
 
 fun main() {
-    checkMonthlyTransactionsTestCases()
+    testMonthlyTransactionsCases()
 
     /*TODO*/
 }
