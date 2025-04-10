@@ -15,11 +15,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Set up JDK 21
-      - name: Set up JDK 21
+      # Set up JDK 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
-          java-version: '21'
+          java-version: '17'
           distribution: 'adoptopenjdk'
 
       # Grant execute permission to gradlew
