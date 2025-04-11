@@ -7,37 +7,37 @@ import org.qudus.squad.logic.models.TransactionType
 
 class FinanceTrackerDataSourceImpl : FinanceTrackerDataSource {
 
-    private val categories: MutableList<Category> = emptyList<Category>().toMutableList()
+    private val _categories: MutableList<Category> =
+        mutableListOf<Category>(Category(name = "Rent") , Category(name = "Salary") , Category(name = "Food"))
     private val transactions: MutableList<Transaction> = emptyList<Transaction>().toMutableList()
+    val categories get() = this._categories
 
-    val _categories
-        get() = categories
     override fun addCategory(category: Category): Boolean {
         if (category.name.isNotEmpty()) {
-            categories.add(category)
+            this._categories.add(category)
             return true
         }
         return false
     }
 
     override fun removeCategory(categoryId: Int): Boolean {
-        return categories.removeIf {
+        return this._categories.removeIf {
             it.id == categoryId
         }
     }
 
     override fun getCategories(): List<Category> {
-        return categories
+        return this._categories
     }
 
     override fun getCategoryById(categoryId: Int): Category? {
-        return categories.find { it.id == categoryId }
+        return this._categories.find { it.id == categoryId }
     }
 
     override fun updateCategory(category: Category): Boolean {
-        val index = categories.indexOfFirst { it.id == category.id }
+        val index = this._categories.indexOfFirst { it.id == category.id }
         return if (index != -1) {
-            categories[index] = category
+            this._categories[index] = category
             true
         } else {
             false
