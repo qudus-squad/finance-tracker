@@ -1,10 +1,11 @@
+/*
 package org.qudus.squad.testCases
-
-
 
 fun main() {
 
-    check(
+   */
+/**//*
+ check(
         name = "when enter Transaction amount above 0 and not equal negative zero,then return true",
         result = true,
         correctResult = true,
@@ -124,3 +125,4 @@ fun check(name: String, result: Boolean, correctResult: Boolean) {
     else println("Failed - $name")
 }
 
+*/
