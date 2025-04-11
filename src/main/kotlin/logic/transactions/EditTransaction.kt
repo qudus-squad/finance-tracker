@@ -1,50 +1,62 @@
 package org.qudus.squad.logic.transactions
-
+import org.qudus.squad.Utilities
 import org.qudus.squad.logic.FinanceTrackerDataSource
+import org.qudus.squad.logic.models.Category
 import org.qudus.squad.logic.models.TransactionType
 
 class EditTransaction(
-   private val datastore: FinanceTrackerDataSource
+    private val datastore: FinanceTrackerDataSource
 ) {
-    fun editTransactionAmount(transactionId: Int, transactionAmount: Double) {
+    fun editTransactionAmount(transactionId: Int, transactionAmount: Double): Boolean {
         if (isValidAmount(transactionAmount)) {
-            val editedTransaction = datastore.getTransactionById(transactionId)
+            val currentTransaction = datastore.getTransactionById(transactionId)
 
-            if (editedTransaction != null) {
-                editedTransaction.amount = transactionAmount
-                datastore.updateTransaction(editedTransaction)
+            if (currentTransaction != null) {
+                val editedTransaction = currentTransaction.copy(amount = transactionAmount)
+                return datastore.updateTransaction(editedTransaction)
             }
         }
+        return false
     }
 
-    fun editTransactionDate(transactionId: Int, transactionDate: Long) {
-        val editedTransaction = datastore.getTransactionById(transactionId)
-        if (editedTransaction != null) {
-            editedTransaction.timeStamp = transactionDate
+    fun editTransactionTimeStamp(transactionId: Int, newTimestamp: String): Boolean {
+        val parts = newTimestamp.split("-")
+        if (parts.size != 3) return false
+
+        val day = parts[0].toInt()
+        val month = parts[1].toInt()
+        val year = parts[2].toInt()
+
+        if (day !in 1..31 || month !in 1..12 || year !in 1..2025) return false
+
+        val currentTransaction = datastore.getTransactionById(transactionId)
+        if (currentTransaction != null) {
+            val newTimestampLong = Utilities.parseDateStringToTimestamp(newTimestamp)
+            val editedTransaction = currentTransaction.copy(timestamp = newTimestampLong)
+            return datastore.updateTransaction(editedTransaction)
+        }
+        return false
+    }
+
+    fun editTransactionCategory(transactionId: Int, category: Category): Boolean {
+
+        val currentTransaction = datastore.getTransactionById(transactionId)
+
+        if (currentTransaction != null) {
+            val editedTransaction = currentTransaction.copy(category = category)
             datastore.updateTransaction(editedTransaction)
-
         }
+        return false
     }
 
-    fun editTransactionCategory(transactionId: Int, transactionCategoryName: String, id: Int) {
-        val editedTransaction = datastore.getTransactionById(transactionId)
-        val newCategoryChooseIt = datastore.getCategoryById(id)
+    fun editTransactionType(transactionId: Int, transactionType: TransactionType): Boolean {
+        val currentTransaction = datastore.getTransactionById(transactionId)
 
-        if (newCategoryChooseIt !in datastore.getCategories())
-
-            if (editedTransaction != null && newCategoryChooseIt != null) {
-                editedTransaction.category = newCategoryChooseIt
-
-            }
-    }
-
-
-    fun editTransactionType(transactionId: Int, transactionType: TransactionType) {
-        val editedTransaction = datastore.getTransactionById(transactionId)
-
-        if (editedTransaction != null) {
-            editedTransaction.type = transactionType
+        if (currentTransaction != null) {
+            val editedTransaction = currentTransaction.copy(type = transactionType)
+            datastore.updateTransaction(editedTransaction)
         }
+        return false
     }
 
 
@@ -52,4 +64,7 @@ class EditTransaction(
         if (transactionAmount < 0) return false
         return true
     }
+
+
+
 }
