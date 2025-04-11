@@ -1,11 +1,11 @@
 package org.qudus.squad.logic.models
 
 data class Transaction(
-    val id: Int? = TransactionIdGenerator.nextId(),
-    var type: TransactionType,
-    var amount: Double,
-    var timeStamp: Long,
-    var category: Category
+    val id: Int = TransactionIdGenerator.nextId(), //not nullable
+    val type: TransactionType,
+    val amount: Double,
+    val timeStamp: Long,
+    val category: Category
 )
 
 object TransactionIdGenerator {
@@ -14,7 +14,5 @@ object TransactionIdGenerator {
 }
 
 enum class TransactionType {
-    Deposit , Withdraw
+    Deposit, Withdraw
 }
-
-

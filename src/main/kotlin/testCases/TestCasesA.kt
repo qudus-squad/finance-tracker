@@ -1,6 +1,4 @@
-/*
-package org.qudus.squad.testCases
-
+package org.qudus.squad.testCases/*
 fun main() {
 
    */
