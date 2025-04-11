@@ -31,21 +31,21 @@ fun testMonthlyTransactionsCases() {
     val investment = Category(4, "Investment")
     val electricity = Category(5, "Electricity")
 
-    financeTrackerDataSourceImpl.addTransaction(Transaction(1, TransactionType.Deposit, 1000.0, dateJan2025, salary))
+    financeTrackerDataSourceImpl.addNewTransaction(Transaction(1, TransactionType.Deposit, 1000.0, dateJan2025, salary))
     val result1 = monthlySheet.listOfTransactionsByMonth("JAN", 2025)
     test("Single income transaction", result1.size == 1 && result1[0].type == TransactionType.Deposit, true)
 
 
     financeTrackerDataSourceImpl.removeTransaction(1)
-    financeTrackerDataSourceImpl.addTransaction(Transaction(2, TransactionType.Withdraw, 500.0, dateJan2025, rent))
+    financeTrackerDataSourceImpl.addNewTransaction(Transaction(2, TransactionType.Withdraw, 500.0, dateJan2025, rent))
     val result2 = monthlySheet.listOfTransactionsByMonth("JAN", 2025)
     test("Single expense transaction", result2.size == 1 && result2[0].type == TransactionType.Withdraw, true)
 
 
     financeTrackerDataSourceImpl.removeTransaction(2)
-    financeTrackerDataSourceImpl.addTransaction(Transaction(3, TransactionType.Deposit, 1500.0, dateJan2025, salary))
-    financeTrackerDataSourceImpl.addTransaction(Transaction(4, TransactionType.Withdraw, 200.0, dateJan2025, food))
-    financeTrackerDataSourceImpl.addTransaction(
+    financeTrackerDataSourceImpl.addNewTransaction(Transaction(3, TransactionType.Deposit, 1500.0, dateJan2025, salary))
+    financeTrackerDataSourceImpl.addNewTransaction(Transaction(4, TransactionType.Withdraw, 200.0, dateJan2025, food))
+    financeTrackerDataSourceImpl.addNewTransaction(
         Transaction(
             5,
             TransactionType.Withdraw,
@@ -59,7 +59,7 @@ fun testMonthlyTransactionsCases() {
 
 
 
-    financeTrackerDataSourceImpl.addTransaction(Transaction(6, TransactionType.Deposit, 900.0, dateApr2026, salary))
+    financeTrackerDataSourceImpl.addNewTransaction(Transaction(6, TransactionType.Deposit, 900.0, dateApr2026, salary))
     val result4 = monthlySheet.listOfTransactionsByMonth("APR", 2026)
     test("Different year", result4.size == 1 && result4[0].timeStamp == dateApr2026, true)
 
@@ -71,8 +71,8 @@ fun testMonthlyTransactionsCases() {
     test("Empty month", result6.isEmpty(), true)
 
 
-    financeTrackerDataSourceImpl.addTransaction(Transaction(7, TransactionType.Withdraw, 400.0, dateJan2025, rent))
-    financeTrackerDataSourceImpl.addTransaction(Transaction(8, TransactionType.Deposit, 1200.0, dateJan2025, salary))
+    financeTrackerDataSourceImpl.addNewTransaction(Transaction(7, TransactionType.Withdraw, 400.0, dateJan2025, rent))
+    financeTrackerDataSourceImpl.addNewTransaction(Transaction(8, TransactionType.Deposit, 1200.0, dateJan2025, salary))
     val result7 = monthlySheet.listOfTransactionsByMonth("JAN", 2025)
     test("Transaction order", result7.first().type == TransactionType.Deposit, true)
 }

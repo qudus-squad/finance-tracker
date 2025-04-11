@@ -13,7 +13,7 @@ class AddNewTransaction(
 
     fun CompleteTransaction(transaction: Transaction) {
         if (isAmountValid(transaction)) {
-            dataSource.addTransaction(transaction)
+            dataSource.addNewTransaction(transaction)
         }
     }
 

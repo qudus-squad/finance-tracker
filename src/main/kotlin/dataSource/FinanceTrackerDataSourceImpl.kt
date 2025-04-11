@@ -36,15 +36,12 @@ class FinanceTrackerDataSourceImpl : FinanceTrackerDataSource {
 
     override fun updateCategory(category: Category): Boolean {
         val index = categories.indexOfFirst { it.id == category.id }
-        return if (index != -1) {
-            categories[index] = category
-            true
-        } else {
-            false
-        }
+        if (index.indexNotFound()) return false
+        categories[index] = category
+        return true
     }
 
-    override fun addTransaction(transaction: Transaction): Boolean {
+    override fun addNewTransaction(transaction: Transaction): Boolean {
         return transactions.add(transaction)
     }
 
@@ -72,12 +69,9 @@ class FinanceTrackerDataSourceImpl : FinanceTrackerDataSource {
 
     override fun updateTransaction(transaction: Transaction): Boolean {
         val index = transactions.indexOfFirst { it.id == transaction.id }
-        return if (index != -1) {
-            transactions[index] = transaction
-            true
-        } else {
-            false
-        }
+        if (index.indexNotFound()) return false
+        transactions[index] = transaction
+        return true
     }
 
     override fun getTotalExpenses(): Double {
@@ -92,3 +86,5 @@ class FinanceTrackerDataSourceImpl : FinanceTrackerDataSource {
         return getTotalIncome() - getTotalExpenses()
     }
 }
+
+private fun Int.indexNotFound() = this == -1
