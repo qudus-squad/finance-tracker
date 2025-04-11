@@ -61,7 +61,7 @@ class FinanceTrackerDataSourceImpl : FinanceTrackerDataSource {
     }
 
     override fun getTransactionsInTimeRange(startTime: Long, endTime: Long): List<Transaction> {
-        return transactions.filter { it.timeStamp in startTime..endTime }
+        return transactions.filter { it.timestamp in startTime..endTime }
     }
 
     override fun getTransactionById(transactionId: Int): Transaction? {
