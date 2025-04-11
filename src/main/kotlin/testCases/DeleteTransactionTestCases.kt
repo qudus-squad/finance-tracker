@@ -4,7 +4,6 @@ import org.qudus.squad.dataSource.FinanceTrackerDataSourceImpl
 import org.qudus.squad.logic.models.Category
 import org.qudus.squad.logic.models.Transaction
 import org.qudus.squad.logic.models.TransactionType
-import org.qudus.squad.logic.transactions.DeleteTransaction
 
 fun main(){
     val dataSource= FinanceTrackerDataSourceImpl()
