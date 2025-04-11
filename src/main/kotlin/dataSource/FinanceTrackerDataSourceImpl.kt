@@ -10,7 +10,7 @@ class FinanceTrackerDataSourceImpl : FinanceTrackerDataSource {
     private val _categories: MutableList<Category> =
         mutableListOf<Category>(Category(name = "Rent") , Category(name = "Salary") , Category(name = "Food"))
     private val transactions: MutableList<Transaction> = emptyList<Transaction>().toMutableList()
-    val categories get() = this._categories
+    val categoryList get() = this._categories
 
     override fun addCategory(category: Category): Boolean {
         if (category.name.isNotEmpty()) {
@@ -36,9 +36,9 @@ class FinanceTrackerDataSourceImpl : FinanceTrackerDataSource {
 
     override fun updateCategory(category: Category): Boolean {
 
-        val index = categories.indexOfFirst { it.id == category.id }
+        val index = categoryList.indexOfFirst { it.id == category.id }
         if (index.indexNotFound()) return false
-        categories[index] = category
+        categoryList[index] = category
         return true
     }
 
@@ -61,7 +61,7 @@ class FinanceTrackerDataSourceImpl : FinanceTrackerDataSource {
     }
 
     override fun getTransactionsInTimeRange(startTime: Long, endTime: Long): List<Transaction> {
-        return transactions.filter { it.timestamp in startTime..endTime }
+        return transactions.filter { it.timeStamp in startTime..endTime }
     }
 
     override fun getTransactionById(transactionId: Int): Transaction? {
