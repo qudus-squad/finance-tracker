@@ -2,6 +2,7 @@ package org.qudus.squad.logic.statements
 
 import org.qudus.squad.dataSource.FinanceTrackerDataSourceImpl
 import org.qudus.squad.logic.models.Transaction
+import org.qudus.squad.logic.models.TransactionType
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,7 +22,7 @@ abstract class ShowMonthlyTransactions(private val financeTrackerImplementation:
                 transactionMonth == monthEnum.value && transactionYear == year
             }
             .sortedBy { element ->
-                if (element.type.lowercase() == "income") 0 else 1
+                if (element.type == TransactionType.Deposit) 0 else 1
             }
     }
 
@@ -38,7 +39,7 @@ abstract class ShowMonthlyTransactions(private val financeTrackerImplementation:
         val dateFormat = SimpleDateFormat("dd-MMM-yyyy")
 
         for (transaction in transactions) {
-            val isIncome = transaction.type.lowercase() == "income"
+            val isIncome = transaction.type == TransactionType.Deposit
             val typeOfTransaction = if (isIncome) "Income" else "Expense"
             val sign = if (isIncome) "+" else "-"
             val formattedDate = dateFormat.format(Date(transaction.timeStamp))
