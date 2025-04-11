@@ -1,6 +1,7 @@
 package org.qudus.squad.logic.transactions
 
 import org.qudus.squad.logic.FinanceTrackerDataSource
+import org.qudus.squad.logic.models.TransactionType
 
 class EditTransaction(
    private val datastore: FinanceTrackerDataSource
@@ -37,7 +38,8 @@ class EditTransaction(
             }
     }
 
-    fun editTransactionType(transactionId: Int, transactionType: String) {
+
+    fun editTransactionType(transactionId: Int, transactionType: TransactionType) {
         val editedTransaction = datastore.getTransactionById(transactionId)
 
         if (editedTransaction != null) {
