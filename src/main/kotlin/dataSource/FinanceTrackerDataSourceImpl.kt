@@ -3,12 +3,15 @@ package org.qudus.squad.dataSource
 import org.qudus.squad.logic.FinanceTrackerDataSource
 import org.qudus.squad.logic.models.Category
 import org.qudus.squad.logic.models.Transaction
+import org.qudus.squad.logic.models.TransactionType
 
 class FinanceTrackerDataSourceImpl : FinanceTrackerDataSource {
 
     private val categories: MutableList<Category> = emptyList<Category>().toMutableList()
     private val transactions: MutableList<Transaction> = emptyList<Transaction>().toMutableList()
 
+    val _categories
+        get() = categories
     override fun addCategory(category: Category): Boolean {
         if (category.name.isNotEmpty()) {
             categories.add(category)
@@ -78,14 +81,14 @@ class FinanceTrackerDataSourceImpl : FinanceTrackerDataSource {
     }
 
     override fun getTotalExpenses(): Double {
-        return transactions.filter { it.amount < 0 }.sumOf { it.amount }
+        return transactions.filter { it.type == TransactionType.Withdraw }.sumOf { it.amount }
     }
 
     override fun getTotalIncome(): Double {
-        return transactions.filter { it.amount > 0 }.sumOf { it.amount }
+        return transactions.filter { it.type == TransactionType.Deposit }.sumOf { it.amount }
     }
 
     override fun getBalance(): Double {
-        return getTotalIncome() + getTotalExpenses()
+        return getTotalIncome() - getTotalExpenses()
     }
 }
