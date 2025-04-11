@@ -8,7 +8,7 @@ import org.qudus.squad.logic.models.TransactionType
 fun main(){
     val dataSource= FinanceTrackerDataSourceImpl()
     val transaction= Transaction(1,TransactionType.Deposit,100.0,2005L, Category(1,"food"))
-    dataSource.addTransaction(transaction)
+    dataSource.addNewTransaction(transaction)
 
     check(
         value = "given a valid transaction when it is deleted then it is removed",

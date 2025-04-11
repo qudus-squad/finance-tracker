@@ -13,7 +13,7 @@ interface FinanceTrackerDataSource {
     fun updateCategory(category: Category): Boolean
 
     // Transaction methods
-    fun addTransaction(transaction: Transaction): Boolean
+    fun addNewTransaction(transaction: Transaction): Boolean
     fun removeTransaction(transactionId: Int): Boolean
     fun getAllTransactions(): List<Transaction>
     fun getTransactionsByCategory(categoryId: Int): List<Transaction>
