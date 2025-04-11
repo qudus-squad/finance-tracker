@@ -2,9 +2,9 @@ name: Kotlin CI
 
 on:
   push:
-    branches: [Kotlin-CI-Integration]
+    branches: ["*"]
   pull_request:
-    branches: [Kotlin-CI-Integration]
+    branches: ["*"]
 
 jobs:
   build:
