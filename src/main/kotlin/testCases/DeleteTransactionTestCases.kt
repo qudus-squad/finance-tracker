@@ -3,33 +3,32 @@ package org.qudus.squad.testCases
 import org.qudus.squad.dataSource.FinanceTrackerDataSourceImpl
 import org.qudus.squad.logic.models.Category
 import org.qudus.squad.logic.models.Transaction
+import org.qudus.squad.logic.models.TransactionType
 import org.qudus.squad.logic.transactions.DeleteTransaction
 
 fun main(){
     val dataSource= FinanceTrackerDataSourceImpl()
-    val transaction= Transaction(1,"Expense",100.0,2005L, Category("Food",1))
+    val transaction= Transaction(1,TransactionType.Deposit,100.0,2005L, Category(1,"food"))
     dataSource.addTransaction(transaction)
+
     check(
-        "given a valid transaction when it is deleted then it is removed",
-        dataSource.removeTransaction(1),
-        true
+        value = "given a valid transaction when it is deleted then it is removed",
+        result = dataSource.removeTransaction(1),
+        correctResult = true
     )
     check(
-        "given an valid transaction when deleted is attempted then it is fails",
-        dataSource.removeTransaction(1),
-        false
+        value = "given an valid transaction when deleted is attempted then it is fails",
+        result = dataSource.removeTransaction(1),
+        correctResult = false
     )
     val emptyDataSource=FinanceTrackerDataSourceImpl()
     check(
-        "given no transaction exist when deleted is attempted then nothing happens",
-        emptyDataSource.removeTransaction(1),
-        false
+        value = "given no transaction exist when deleted is attempted then nothing happens",
+        result = emptyDataSource.removeTransaction(1),
+        correctResult = false
     )
 
-
 }
-
-
 
 fun check(value:String,result:Boolean,correctResult:Boolean){
     if (result==correctResult){
