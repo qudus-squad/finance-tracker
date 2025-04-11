@@ -24,11 +24,11 @@ fun testMonthlyTransactionsCases() {
 
 
     // adding Categories
-    val salary = Category(1, "Salary")
-    val rent = Category(2, "Rent")
-    val food = Category(3, "Food")
-    val investment = Category(4, "Investment")
-    val electricity = Category(5, "Electricity")
+    val salary = Category("Salary", 1)
+    val rent = Category("Rent", 2)
+    val food = Category("Food", 3)
+    val investment = Category("Investment", 4)
+    val electricity = Category("Electricity", 5)
 
     financeTrackerDataSourceImpl.addTransaction(Transaction(1, "income", 1000.0, dateJan2025, salary))
     val result1 = monthlySheet.listOfTransactionsByMonth("JAN", 2025)

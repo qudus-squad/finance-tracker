@@ -5,7 +5,5 @@ import org.qudus.squad.testCases.testMonthlyTransactionsCases
 
 
 fun main() {
-//    testMonthlyTransactionsCases()
-    testDeleteCategoryFunction()
     /*TODO*/
 }
