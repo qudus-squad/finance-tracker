@@ -6,13 +6,9 @@ import org.qudus.squad.logic.FinanceTrackerDataSource
 class DeleteTransaction(private val dataSource: FinanceTrackerDataSourceImpl) {
     fun deleteTransaction(transactionId: Int):Boolean{
         val transaction=dataSource.getTransactionById(transactionId)
-        return if(transaction !=null){
+        return if(transaction ==null){
             dataSource.removeTransaction(transactionId)
-            true
-        }else{
-            false
-        }
+             false
+        }else dataSource.removeTransaction(transactionId)
     }
-
-
 }
