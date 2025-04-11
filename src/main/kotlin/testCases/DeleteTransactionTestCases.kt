@@ -9,6 +9,7 @@ fun main(){
     val dataSource= FinanceTrackerDataSourceImpl()
     val transaction= Transaction(1,"Expense",100.0,2005L, Category(1,"food"))
     dataSource.addTransaction(transaction)
+
     check(
         "given a valid transaction when it is deleted then it is removed",
         dataSource.removeTransaction(1),
