@@ -9,7 +9,7 @@ class AddNewTransaction(
 ) {
     fun addNewTransaction(transaction: Transaction) {
         if (isAmountValid(transaction)) {
-            dataSource.addTransaction(transaction)
+            dataSource.addNewTransaction(transaction)
         }
     }
 
