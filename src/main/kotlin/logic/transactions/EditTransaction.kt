@@ -3,57 +3,50 @@ package org.qudus.squad.logic.transactions
 import org.qudus.squad.logic.FinanceTrackerDataSource
 
 class EditTransaction(
-    val datastore: FinanceTrackerDataSource
+   private val datastore: FinanceTrackerDataSource
 ) {
-    fun editTransactionAmount(transactionId: Int, transactionAmount: Double): Boolean {
+    fun editTransactionAmount(transactionId: Int, transactionAmount: Double) {
         if (isValidAmount(transactionAmount)) {
-            val Editedtransaction = datastore.getTransactionById(transactionId)
-            if (Editedtransaction != null) {
-                Editedtransaction.amount = transactionAmount
-                datastore.updateTransaction(Editedtransaction)
-                return true
+            val editedTransaction = datastore.getTransactionById(transactionId)
+
+            if (editedTransaction != null) {
+                editedTransaction.amount = transactionAmount
+                datastore.updateTransaction(editedTransaction)
             }
         }
-        return false
     }
 
-    fun editTransactionDate(transactionId: Int, transactionDate: Long): Boolean {
-        val Editedtransaction = datastore.getTransactionById(transactionId)
-        if (Editedtransaction != null) {
-            Editedtransaction.timeStamp = transactionDate
-            datastore.updateTransaction(Editedtransaction)
+    fun editTransactionDate(transactionId: Int, transactionDate: Long) {
+        val editedTransaction = datastore.getTransactionById(transactionId)
+        if (editedTransaction != null) {
+            editedTransaction.timeStamp = transactionDate
+            datastore.updateTransaction(editedTransaction)
 
-            return true
         }
-        return false
     }
 
-
-    fun editTransactionCategory(transactionId: Int, transactionCategoryName: String, id: Int): Boolean {
-        val Editedtransaction = datastore.getTransactionById(transactionId)
+    fun editTransactionCategory(transactionId: Int, transactionCategoryName: String, id: Int) {
+        val editedTransaction = datastore.getTransactionById(transactionId)
         val newCategoryChooseIt = datastore.getCategoryById(id)
 
-        if (newCategoryChooseIt !in datastore.getCategories()) return false
+        if (newCategoryChooseIt !in datastore.getCategories())
 
-        if (Editedtransaction != null && newCategoryChooseIt != null) {
-            Editedtransaction.category = newCategoryChooseIt
-            return true
-        }
-        return false
+            if (editedTransaction != null && newCategoryChooseIt != null) {
+                editedTransaction.category = newCategoryChooseIt
+
+            }
     }
 
-    fun editTransactionType(transactionId: Int, transactionType: String): Boolean {
-        val Editedtransaction = datastore.getTransactionById(transactionId)
+    fun editTransactionType(transactionId: Int, transactionType: String) {
+        val editedTransaction = datastore.getTransactionById(transactionId)
 
-        if (Editedtransaction != null) {
-            Editedtransaction.type = transactionType
-            return true
+        if (editedTransaction != null) {
+            editedTransaction.type = transactionType
         }
-        return false
     }
 
 
-    fun isValidAmount(transactionAmount: Double): Boolean {
+    private fun isValidAmount(transactionAmount: Double): Boolean {
         if (transactionAmount < 0) return false
         return true
     }
