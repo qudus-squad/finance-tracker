@@ -11,6 +11,12 @@ data class Transaction(
 object TransactionIdGenerator {
     private var counter = 0
     fun nextId(): Int = ++counter
+
+    fun resetCounter(value: Int) {
+        counter = value
+    }
+
+    fun getCurrentCounter(): Int = counter
 }
 
 enum class TransactionType {

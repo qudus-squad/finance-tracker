@@ -12,18 +12,42 @@ class FinanceTrackerDataSourceImpl : FinanceTrackerDataSource {
     private val transactions: MutableList<Transaction> = emptyList<Transaction>().toMutableList()
     val categoryList get() = this._categories
 
+    init {
+        FileDatabase.loadCounters()
+
+        val loadedCategories = FileDatabase.loadCategories()
+        if (loadedCategories.isNotEmpty()) {
+            _categories.clear()
+            _categories.addAll(loadedCategories)
+        }
+
+        val loadedTransactions = FileDatabase.loadTransactions(_categories)
+        if (loadedTransactions.isNotEmpty()) {
+            transactions.clear()
+            transactions.addAll(loadedTransactions)
+        }
+    }
+
     override fun addCategory(category: Category): Boolean {
         if (category.name.isNotEmpty()) {
             this._categories.add(category)
+            FileDatabase.saveCategories(_categories)
+            FileDatabase.saveCounters()
             return true
         }
         return false
     }
 
     override fun removeCategory(categoryId: Int): Boolean {
-        return this._categories.removeIf {
+        val result = this._categories.removeIf {
             it.id == categoryId
         }
+
+        if (result) {
+            FileDatabase.saveCategories(_categories)
+        }
+
+        return result
     }
 
     override fun getCategories(): List<Category> {
@@ -39,17 +63,32 @@ class FinanceTrackerDataSourceImpl : FinanceTrackerDataSource {
         val index = categoryList.indexOfFirst { it.id == category.id }
         if (index.indexNotFound()) return false
         categoryList[index] = category
+        FileDatabase.saveCategories(_categories)
         return true
     }
 
     override fun addNewTransaction(transaction: Transaction): Boolean {
-        return transactions.add(transaction)
+        val result = transactions.add(transaction)
+
+        // Save changes
+        if (result) {
+            FileDatabase.saveTransactions(transactions)
+            FileDatabase.saveCounters()
+        }
+
+        return result
     }
 
     override fun removeTransaction(transactionId: Int): Boolean {
-        return transactions.removeIf {
+        val result = transactions.removeIf {
             it.id == transactionId
         }
+
+        if (result) {
+            FileDatabase.saveTransactions(transactions)
+        }
+
+        return result
     }
 
     override fun getAllTransactions(): List<Transaction> {
@@ -71,7 +110,11 @@ class FinanceTrackerDataSourceImpl : FinanceTrackerDataSource {
     override fun editExistingCategory(transaction: Transaction): Boolean {
         val index = transactions.indexOfFirst { it.id == transaction.id }
         if (index.indexNotFound()) return false
+
         transactions[index] = transaction
+
+        FileDatabase.saveTransactions(transactions)
+
         return true
     }
 
