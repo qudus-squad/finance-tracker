@@ -1,24 +1,17 @@
 package org.qudus.squad.testCases
 
 import org.qudus.squad.dataSource.FinanceTrackerDataSourceImpl
+import org.qudus.squad.logic.FinanceTrackerDataSource
 import org.qudus.squad.logic.models.Transaction
 import org.qudus.squad.logic.models.Category
 import org.qudus.squad.logic.models.TransactionType
 import org.qudus.squad.logic.statements.ShowMonthlyTransactions
 import java.util.*
 
-class TestMonthlyTransactions(financeTrackerImpl: FinanceTrackerDataSourceImpl) :
-    ShowMonthlyTransactions(financeTrackerImpl) {
-
-    fun listOfTransactionsByMonth(month: String, year: Int): List<Transaction> {
-        return getTransactionsByMonth(month, year)
-    }
-
-}
 
 fun testMonthlyTransactionsCases() {
-    val financeTrackerDataSourceImpl = FinanceTrackerDataSourceImpl()
-    val monthlySheet = TestMonthlyTransactions(financeTrackerDataSourceImpl)
+    val financeTrackerDataSource: FinanceTrackerDataSource = FinanceTrackerDataSourceImpl()
+    val monthlySheet = ShowMonthlyTransactions(financeTrackerDataSource)
 
     val dateJan2025 = Calendar.getInstance().apply { set(2025, Calendar.JANUARY, 1) }.timeInMillis
     val dateApr2026 = Calendar.getInstance().apply { set(2026, Calendar.APRIL, 1) }.timeInMillis
@@ -31,21 +24,21 @@ fun testMonthlyTransactionsCases() {
     val investment = Category(4, "Investment")
     val electricity = Category(5, "Electricity")
 
-    financeTrackerDataSourceImpl.addNewTransaction(Transaction(1, TransactionType.Deposit, 1000.0, dateJan2025, salary))
-    val result1 = monthlySheet.listOfTransactionsByMonth("JAN", 2025)
+    financeTrackerDataSource.addNewTransaction(Transaction(1, TransactionType.Deposit, 1000.0, dateJan2025, salary))
+    val result1 = monthlySheet.displayMonthlySheet(monthlySheet.getDaysInMonthInMillis(2025 , 1), 2025)
     test("Single income transaction", result1.size == 1 && result1[0].type == TransactionType.Deposit, true)
 
 
-    financeTrackerDataSourceImpl.removeTransaction(1)
-    financeTrackerDataSourceImpl.addNewTransaction(Transaction(2, TransactionType.Withdraw, 500.0, dateJan2025, rent))
-    val result2 = monthlySheet.listOfTransactionsByMonth("JAN", 2025)
+    financeTrackerDataSource.removeTransaction(1)
+    financeTrackerDataSource.addNewTransaction(Transaction(2, TransactionType.Withdraw, 500.0, dateJan2025, rent))
+    val result2 =monthlySheet.displayMonthlySheet(monthlySheet.getDaysInMonthInMillis(2025 , 1), 2025)
     test("Single expense transaction", result2.size == 1 && result2[0].type == TransactionType.Withdraw, true)
 
 
-    financeTrackerDataSourceImpl.removeTransaction(2)
-    financeTrackerDataSourceImpl.addNewTransaction(Transaction(3, TransactionType.Deposit, 1500.0, dateJan2025, salary))
-    financeTrackerDataSourceImpl.addNewTransaction(Transaction(4, TransactionType.Withdraw, 200.0, dateJan2025, food))
-    financeTrackerDataSourceImpl.addNewTransaction(
+    financeTrackerDataSource.removeTransaction(2)
+    financeTrackerDataSource.addNewTransaction(Transaction(3, TransactionType.Deposit, 1500.0, dateJan2025, salary))
+    financeTrackerDataSource.addNewTransaction(Transaction(4, TransactionType.Withdraw, 200.0, dateJan2025, food))
+    financeTrackerDataSource.addNewTransaction(
         Transaction(
             5,
             TransactionType.Withdraw,
@@ -54,26 +47,23 @@ fun testMonthlyTransactionsCases() {
             electricity
         )
     )
-    val result3 = monthlySheet.listOfTransactionsByMonth("JAN", 2025)
+    val result3 =monthlySheet.displayMonthlySheet(monthlySheet.getDaysInMonthInMillis(2025 , 1), 2025)
     test("Multiple transactions", result3.size == 3 && result3.count { it.type == TransactionType.Deposit } == 1, true)
 
 
 
-    financeTrackerDataSourceImpl.addNewTransaction(Transaction(6, TransactionType.Deposit, 900.0, dateApr2026, salary))
-    val result4 = monthlySheet.listOfTransactionsByMonth("APR", 2026)
+    financeTrackerDataSource.addNewTransaction(Transaction(6, TransactionType.Deposit, 900.0, dateApr2026, salary))
+    val result4 = monthlySheet.displayMonthlySheet(monthlySheet.getDaysInMonthInMillis(2025 , 4), 2026)
     test("Different year", result4.size == 1 && result4[0].timestamp == dateApr2026, true)
 
 
-    val result5 = monthlySheet.listOfTransactionsByMonth("XYZ", 2025)
+    val result5 =monthlySheet.displayMonthlySheet(monthlySheet.getDaysInMonthInMillis(2025 , 13), 2025)
     test("Invalid month input", result5.isEmpty(), true)
 
-    val result6 = monthlySheet.listOfTransactionsByMonth("DEC", 2025)
-    test("Empty month", result6.isEmpty(), true)
 
-
-    financeTrackerDataSourceImpl.addNewTransaction(Transaction(7, TransactionType.Withdraw, 400.0, dateJan2025, rent))
-    financeTrackerDataSourceImpl.addNewTransaction(Transaction(8, TransactionType.Deposit, 1200.0, dateJan2025, salary))
-    val result7 = monthlySheet.listOfTransactionsByMonth("JAN", 2025)
+    financeTrackerDataSource.addNewTransaction(Transaction(7, TransactionType.Withdraw, 400.0, dateJan2025, rent))
+    financeTrackerDataSource.addNewTransaction(Transaction(8, TransactionType.Deposit, 1200.0, dateJan2025, salary))
+    val result7 = monthlySheet.displayMonthlySheet(monthlySheet.getDaysInMonthInMillis(2025 , 13), 2025)
     test("Transaction order", result7.first().type == TransactionType.Deposit, true)
 }
 

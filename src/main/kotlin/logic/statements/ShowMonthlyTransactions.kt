@@ -1,62 +1,48 @@
 package org.qudus.squad.logic.statements
-
-import org.qudus.squad.dataSource.FinanceTrackerDataSourceImpl
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Month
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import org.qudus.squad.Utilities
+import org.qudus.squad.logic.FinanceTrackerDataSource
 import org.qudus.squad.logic.models.Transaction
-import org.qudus.squad.logic.models.TransactionType
-import java.text.SimpleDateFormat
-import java.util.*
 
-abstract class ShowMonthlyTransactions(private val financeTrackerImplementation: FinanceTrackerDataSourceImpl) {
+class ShowMonthlyTransactions(private val dataSource: FinanceTrackerDataSource) {
 
-    protected fun getTransactionsByMonth(month: String, year: Int): List<Transaction> {
-        val monthEnum = Month.fromString(month) ?: return emptyList()
+    fun getDaysInMonthInMillis(year: Int, month: Int): List<Long> {
+        val months = Month.entries[month - 1]
+        val isLeapYear = isLeapYear(year)
+        val daysInMonth = months.length(isLeapYear)
 
-        return financeTrackerImplementation.getAllTransactions()
-            .filter { element ->
-                val calendar = Calendar.getInstance()
-                calendar.timeInMillis = element.timestamp
+        val currentDate = Utilities.getCurrentDate()
 
-                val transactionMonth = calendar.get(Calendar.MONTH)
-                val transactionYear = calendar.get(Calendar.YEAR)
+        return (1..daysInMonth).mapNotNull { day ->
+            val dateInMillis = LocalDate(year, months, day)
+                .atStartOfDayIn(TimeZone.currentSystemDefault())
+                .toEpochMilliseconds()
 
-                transactionMonth == monthEnum.value && transactionYear == year
-            }
-            .sortedBy { element ->
-                if (element.type == TransactionType.Deposit) 0 else 1
-            }
+            if (dateInMillis <= currentDate) dateInMillis else null
+        }
     }
 
-    open fun displayMonthlySheet(month: String, year: Int) {
-        val transactions = getTransactionsByMonth(month, year)
+    private fun isLeapYear(year: Int): Boolean {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+    }
 
-        if (transactions.isEmpty()) {
-            println("No transactions found for $month $year.")
-            return
+
+    fun displayMonthlySheet(months: List<Long>, year: Int): List<Transaction> {
+        val transactions = mutableListOf<Transaction>()
+
+        for (startOfDay in months) {
+            val endOfDay = startOfDay + 86_400_000L
+            val dailyTransactions = dataSource.getTransactionsInTimeRange(startOfDay, endOfDay)
+            transactions.addAll(dailyTransactions)
         }
-
-        println("Your ${month.uppercase()} Monthly Sheet Is:")
-
-        val dateFormat = SimpleDateFormat("dd-MMM-yyyy")
-
-        for (transaction in transactions) {
-            val isIncome = transaction.type == TransactionType.Deposit
-            val typeOfTransaction = if (isIncome) "Income" else "Expense"
-            val sign = if (isIncome) "+" else "-"
-            val formattedDate = dateFormat.format(Date(transaction.timestamp))
-
-            println("$typeOfTransaction: $sign${transaction.amount} USD - ${transaction.category.name} - $formattedDate")
-        }
-
-        println("Choose 0 to continue")
+        return transactions
     }
 }
 
-enum class Month(val value: Int) {
-    JAN(0), FEB(1), MAR(2), APR(3), MAY(4), JUN(5),
-    JUL(6), AUG(7), SEP(8), OCT(9), NOV(10), DEC(11);
-
-    companion object {
-        fun fromString(name: String): Month? =
-            entries.find { element -> element.name.equals(name, ignoreCase = true) }
-    }
+fun isValidMonth(date: Int): Boolean {
+    if (date in 1..12) return true
+    return false
 }
