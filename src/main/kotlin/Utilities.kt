@@ -4,7 +4,7 @@ import kotlinx.datetime.*
 
 object Utilities {
     fun timestampToFormattedDate(timestamp: Long): String {
-        val dateTime = Instant.fromEpochMilliseconds(timestamp * 1000).toLocalDateTime(TimeZone.currentSystemDefault())
+        val dateTime = Instant.fromEpochMilliseconds(timestamp).toLocalDateTime(TimeZone.currentSystemDefault())
         return "%02d-%02d-%d".format(dateTime.dayOfMonth, dateTime.monthNumber, dateTime.year)
     }
 
@@ -19,6 +19,9 @@ object Utilities {
         val date = LocalDate(year, month, day)
         val dateTime = date.atStartOfDayIn(TimeZone.currentSystemDefault())
         return dateTime.toEpochMilliseconds()
+    }
+    fun getCurrentDate() : Long{
+      return Clock.System.now().toEpochMilliseconds()
     }
 
 }
