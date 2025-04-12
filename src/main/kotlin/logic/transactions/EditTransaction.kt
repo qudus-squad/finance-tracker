@@ -1,5 +1,5 @@
 package org.qudus.squad.logic.transactions
-import org.qudus.squad.Utilities
+import org.qudus.squad.Utils
 import org.qudus.squad.logic.FinanceTrackerDataSource
 import org.qudus.squad.logic.models.Category
 import org.qudus.squad.logic.models.TransactionType
@@ -22,16 +22,13 @@ class EditTransaction(
     fun editTransactionTimeStamp(transactionId: Int, newTimestamp: String): Boolean {
         val parts = newTimestamp.split("-")
         if (parts.size != 3) return false
-
         val day = parts[0].toInt()
         val month = parts[1].toInt()
         val year = parts[2].toInt()
-
         if (day !in 1..31 || month !in 1..12 || year !in 1..2025) return false
-
         val currentTransaction = datastore.getTransactionById(transactionId)
         if (currentTransaction != null) {
-            val newTimestampLong = Utilities.parseDateStringToTimestamp(newTimestamp)
+            val newTimestampLong = Utils.parseDateStringToTimestamp(newTimestamp)
             val editedTransaction = currentTransaction.copy(timestamp = newTimestampLong)
             return datastore.editExistingCategory(editedTransaction)
         }
@@ -39,9 +36,7 @@ class EditTransaction(
     }
 
     fun editTransactionCategory(transactionId: Int, category: Category): Boolean {
-
         val currentTransaction = datastore.getTransactionById(transactionId)
-
         if (currentTransaction != null) {
             val editedTransaction = currentTransaction.copy(category = category)
             datastore.editExistingCategory(editedTransaction)
@@ -51,7 +46,6 @@ class EditTransaction(
 
     fun editTransactionType(transactionId: Int, transactionType: TransactionType): Boolean {
         val currentTransaction = datastore.getTransactionById(transactionId)
-
         if (currentTransaction != null) {
             val editedTransaction = currentTransaction.copy(type = transactionType)
             datastore.editExistingCategory(editedTransaction)
@@ -59,12 +53,8 @@ class EditTransaction(
         return false
     }
 
-
     private fun isValidAmount(transactionAmount: Double): Boolean {
         if (transactionAmount < 0) return false
         return true
     }
-
-
-
 }

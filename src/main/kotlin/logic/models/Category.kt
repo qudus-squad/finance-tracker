@@ -8,4 +8,10 @@ data class Category(
 object CategoryIdGenerator {
     private var counter = 0
     fun nextId(): Int = ++counter
+
+    fun resetCounter(value: Int) {
+        counter = value
+    }
+
+    fun getCurrentCounter(): Int = counter
 }
