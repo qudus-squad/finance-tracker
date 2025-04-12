@@ -10,7 +10,7 @@ interface FinanceTrackerDataSource {
     fun removeCategory(categoryId: Int): Boolean
     fun getCategories(): List<Category>
     fun getCategoryById(categoryId: Int): Category?
-    fun updateCategory(category: Category): Boolean
+    fun editExistingCategory(category: Category): Boolean
 
     // Transaction methods
     fun addNewTransaction(transaction: Transaction): Boolean
@@ -19,7 +19,7 @@ interface FinanceTrackerDataSource {
     fun getTransactionsByCategory(categoryId: Int): List<Transaction>
     fun getTransactionsInTimeRange(startTime: Long, endTime: Long): List<Transaction>
     fun getTransactionById(transactionId: Int): Transaction?
-    fun updateTransaction(transaction: Transaction): Boolean
+    fun editExistingCategory(transaction: Transaction): Boolean
 
     // Utility methods
     fun getTotalExpenses(): Double

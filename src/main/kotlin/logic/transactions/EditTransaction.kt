@@ -13,7 +13,7 @@ class EditTransaction(
 
             if (currentTransaction != null) {
                 val editedTransaction = currentTransaction.copy(amount = transactionAmount)
-                return datastore.updateTransaction(editedTransaction)
+                return datastore.editExistingCategory(editedTransaction)
             }
         }
         return false
@@ -33,7 +33,7 @@ class EditTransaction(
         if (currentTransaction != null) {
             val newTimestampLong = Utilities.parseDateStringToTimestamp(newTimestamp)
             val editedTransaction = currentTransaction.copy(timestamp = newTimestampLong)
-            return datastore.updateTransaction(editedTransaction)
+            return datastore.editExistingCategory(editedTransaction)
         }
         return false
     }
@@ -44,7 +44,7 @@ class EditTransaction(
 
         if (currentTransaction != null) {
             val editedTransaction = currentTransaction.copy(category = category)
-            datastore.updateTransaction(editedTransaction)
+            datastore.editExistingCategory(editedTransaction)
         }
         return false
     }
@@ -54,7 +54,7 @@ class EditTransaction(
 
         if (currentTransaction != null) {
             val editedTransaction = currentTransaction.copy(type = transactionType)
-            datastore.updateTransaction(editedTransaction)
+            datastore.editExistingCategory(editedTransaction)
         }
         return false
     }
