@@ -4,7 +4,7 @@ import org.qudus.squad.logic.FinanceTrackerDataSource
 import org.qudus.squad.logic.models.Category
 
 class DeleteCategory(private val dataSource: FinanceTrackerDataSource) {
-    fun deleteCategory(category: Category): Boolean {
+    fun removeCategory(category: Category) : Boolean {
         return dataSource.removeCategory(category.id)
     }
 }
