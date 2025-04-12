@@ -12,7 +12,7 @@ class TestAddNewTransaction(
         type = TransactionType.Deposit,
         category = Category(1, "Rent"),
         amount = -1.0,
-        timeStamp = 20250,
+        timestamp = 20250,
     )
 
     fun check() {

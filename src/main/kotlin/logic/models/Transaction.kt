@@ -4,7 +4,7 @@ data class Transaction(
     val id: Int = TransactionIdGenerator.nextId(), //not nullable
     val type: TransactionType,
     val amount: Double,
-    val timeStamp: Long,
+    val timestamp: Long,
     val category: Category
 )
 

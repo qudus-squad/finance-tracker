@@ -14,7 +14,7 @@ abstract class ShowMonthlyTransactions(private val financeTrackerImplementation:
         return financeTrackerImplementation.getAllTransactions()
             .filter { element ->
                 val calendar = Calendar.getInstance()
-                calendar.timeInMillis = element.timeStamp
+                calendar.timeInMillis = element.timestamp
 
                 val transactionMonth = calendar.get(Calendar.MONTH)
                 val transactionYear = calendar.get(Calendar.YEAR)
@@ -42,7 +42,7 @@ abstract class ShowMonthlyTransactions(private val financeTrackerImplementation:
             val isIncome = transaction.type == TransactionType.Deposit
             val typeOfTransaction = if (isIncome) "Income" else "Expense"
             val sign = if (isIncome) "+" else "-"
-            val formattedDate = dateFormat.format(Date(transaction.timeStamp))
+            val formattedDate = dateFormat.format(Date(transaction.timestamp))
 
             println("$typeOfTransaction: $sign${transaction.amount} USD - ${transaction.category.name} - $formattedDate")
         }

@@ -61,7 +61,7 @@ fun testMonthlyTransactionsCases() {
 
     financeTrackerDataSourceImpl.addNewTransaction(Transaction(6, TransactionType.Deposit, 900.0, dateApr2026, salary))
     val result4 = monthlySheet.listOfTransactionsByMonth("APR", 2026)
-    test("Different year", result4.size == 1 && result4[0].timeStamp == dateApr2026, true)
+    test("Different year", result4.size == 1 && result4[0].timestamp == dateApr2026, true)
 
 
     val result5 = monthlySheet.listOfTransactionsByMonth("XYZ", 2025)
