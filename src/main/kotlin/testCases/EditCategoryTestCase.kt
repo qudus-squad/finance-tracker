@@ -4,7 +4,7 @@ import org.qudus.squad.dataSource.FinanceTrackerDataSourceImpl
 import org.qudus.squad.logic.categories.EditCategory
 import org.qudus.squad.logic.models.Category
 
-class EditCategoryTestCase(private val editCategory: EditCategory = EditCategory(FinanceTrackerDataSourceImpl)){
+class EditCategoryTestCase(private val editCategory: EditCategory = EditCategory(FinanceTrackerDataSourceImpl())){
 
     fun test() {
         categoryEditTestCase(
