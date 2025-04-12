@@ -1,11 +1,11 @@
 package org.qudus.squad.logic.categories
 
-import org.qudus.squad.dataSource.FinanceTrackerDataSourceImpl
-import org.qudus.squad.logic.models.Category
+import org.qudus.squad.logic.FinanceTrackerDataSource
 
-class EditCategory(private val dataSource:FinanceTrackerDataSourceImpl) {
+class EditCategory(private val dataSource: FinanceTrackerDataSource) {
 
-    fun editCategory(newCategory: Category, oldCategory: String) : Boolean{
-        return dataSource.updateCategory(newCategory)
+    fun editCategory(categoryId: Int, newCategoryName: String): Boolean {
+        val category = dataSource.getCategoryById(categoryId) ?: return false
+        return dataSource.editExistingCategory(category.copy(name = newCategoryName))
     }
 }

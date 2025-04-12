@@ -14,13 +14,13 @@ fun testDeleteCategoryFunction() {
     dataSource.addCategory(shopping)
     dataSource.addCategory(travel)
 
-    val result1 = deleteCategory.removeCategory(shopping)
+    val result1 = deleteCategory.deleteCategory(shopping)
     test("Remove existing category", result1, true)
 
-    val result2 = deleteCategory.removeCategory(shopping)
+    val result2 = deleteCategory.deleteCategory(shopping)
     test("Remove non-existing category (already removed)", result2, false)
 
-    val result3 = deleteCategory.removeCategory(travel)
+    val result3 = deleteCategory.deleteCategory(travel)
     test("Remove second existing category", result3, true)
 
     val remainingCategories = dataSource.getCategories()
